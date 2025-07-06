@@ -33,7 +33,7 @@ RETURN r.NomeRem AS NomeRemedio, r.Tipo AS TipoRemedio, r.Controlado AS EhContro
 // Consulta 6: Encontrar todos os Médicos que realizaram uma consulta em um mês específico (ex: Janeiro de 2025)
 // e os Pacientes que eles atenderam nessas consultas.
 // Esta consulta envolve múltiplos saltos (Médico -> Consulta -> Paciente) e filtragem por data.
-MATCH (m:Medico)-[:REALIZA]->(co:Consulta)-[:EH_PACIENTE_DA_CONSULTA]->(p:Paciente)
+MATCH (m:Medico)-[:REALIZA]->(co:Consulta)<-[:EH_PACIENTE_DA_CONSULTA]-(p:Paciente)
 WHERE co.Dia.year = 2025 AND co.Dia.month = 1
 RETURN m.Nome AS NomeMedico, p.NomePac AS NomePaciente, co.Dia AS DataConsulta, co.Hora AS HoraConsulta
 ORDER BY NomeMedico, DataConsulta, HoraConsulta;
