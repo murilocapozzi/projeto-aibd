@@ -1,22 +1,31 @@
-// Restrição de unicidade para o Código do Funcionário
-CREATE CONSTRAINT ON (f:Funcionario) ASSERT f.CodFunc IS UNIQUE;
+CREATE CONSTRAINT CodFunc_unico IF NOT EXISTS
+FOR (f:Funcionario)
+REQUIRE f.CodFunc IS UNIQUE;
 
-// Restrição de unicidade para o Código do Setor
-CREATE CONSTRAINT ON (s:Setor) ASSERT s.CodSet IS UNIQUE;
+CREATE CONSTRAINT CodSet_unico IF NOT EXISTS
+FOR (s:Setor)
+REQUIRE s.CodSet IS UNIQUE;
 
-// Restrição de unicidade para o Código do Histórico
-CREATE CONSTRAINT ON (h:Historico) ASSERT h.CodHist IS UNIQUE;
+CREATE CONSTRAINT CodHist_unico IF NOT EXISTS
+FOR (h:Historico)
+REQUIRE h.CodHist IS UNIQUE;
 
-// Restrição de unicidade para o Código do Consultório
-CREATE CONSTRAINT ON (c:Consultorio) ASSERT c.CodConsult IS UNIQUE;
+CREATE CONSTRAINT CodConsult_unico IF NOT EXISTS
+FOR (c:Consultorio)
+REQUIRE c.CodConsult IS UNIQUE;
 
-// Restrição de unicidade para o Código do Paciente
-CREATE CONSTRAINT ON (p:Paciente) ASSERT p.CodPac IS UNIQUE;
-// Restrição de unicidade para o CPF do Paciente
-CREATE CONSTRAINT ON (p:Paciente) ASSERT p.CPF IS UNIQUE;
+CREATE CONSTRAINT CodPac_unico IF NOT EXISTS
+FOR (p:Paciente)
+REQUIRE p.CodPac IS UNIQUE;
 
-// Restrição de unicidade para o Código do Remédio
-CREATE CONSTRAINT ON (r:Remedio) ASSERT r.CodRem IS UNIQUE;
+CREATE CONSTRAINT CPF_unico IF NOT EXISTS
+FOR (p:Paciente)
+REQUIRE p.CPF IS UNIQUE;
 
-// Restrição de unicidade para o Código da Unidade de Remédio
-CREATE CONSTRAINT ON (ru:RemedioUnidade) ASSERT ru.CodUnid IS UNIQUE;
+CREATE CONSTRAINT CodRem_unico IF NOT EXISTS
+FOR (r:Remedio)
+REQUIRE r.CodRem IS UNIQUE;
+
+CREATE CONSTRAINT CodUnid_unico IF NOT EXISTS
+FOR (ru:RemedioUnidade)
+REQUIRE ru.CodUnid IS UNIQUE;
