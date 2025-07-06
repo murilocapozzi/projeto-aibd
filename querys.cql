@@ -81,19 +81,7 @@ RETURN f.Nome AS MedicoSupervisor, c.Sala AS ConsultorioSupervisionado,
        medicoConsulta.Nome AS MedicoDaConsulta, pac.NomePac AS PacienteDaConsulta
 ORDER BY c.Sala, co.Dia, co.Hora;
 
-// Consulta 11: Encontrar Funcionários que já trabalharam em um Setor Administrativo (baseado no histórico)
-// E que atualmente supervisionam (ou supervisionaram) um Consultório.
-// Esta consulta combina informações de histórico com responsabilidades atuais/passadas em consultórios.
-MATCH (f:Funcionario)<-[:REGISTRADO_POR]-(h:Historico)
-WHERE h.Descricao CONTAINS 'setor administrativo' // Busca por "setor administrativo" na descrição do histórico
-WITH DISTINCT f // Garante que cada funcionário seja considerado apenas uma vez
-MATCH (f)-[:SUPERVISIONADO_POR]->(c:Consultorio) // Verifica se o funcionário supervisiona algum consultório
-RETURN f.CodFunc AS CodigoFuncionario, f.Nome AS NomeFuncionario,
-       COLLECT(DISTINCT h.Descricao) AS HistoricosAdministrativos, // Coleta todos os históricos administrativos
-       COLLECT(DISTINCT c.Sala) AS ConsultoriosSupervisionados
-ORDER BY f.Nome;
-
-// Consulta 12: Listar Pacientes que tiveram consultas onde um Remédio Controlado de um tipo específico
+// Consulta 11: Listar Pacientes que tiveram consultas onde um Remédio Controlado de um tipo específico
 // (ex: 'Ansiolítico') foi utilizado, e identificar os Médicos envolvidos nessas consultas.
 // Esta consulta exige múltiplos saltos e filtragem em propriedades de nós e relacionamentos.
 MATCH (p:Paciente)-[:EH_PACIENTE_DA_CONSULTA]->(co:Consulta)
@@ -107,7 +95,7 @@ RETURN p.NomePac AS NomePaciente, p.CPF AS CPFPaciente,
        rem.NomeRem AS RemedioUtilizado, rem.Tipo AS TipoRemedio, rem.Controlado AS RemedioControlado
 ORDER BY p.NomePac, co.Dia, co.Hora;
 
-// Consulta 13: Contar o número de consultas realizadas por cada Médico por mês.
+// Consulta 12: Contar o número de consultas realizadas por cada Médico por mês.
 // Esta consulta demonstra o uso de extração de partes de data e agregação (COUNT)
 // para obter uma visão mensal da atividade dos médicos.
 MATCH (m:Medico)-[:REALIZA]->(co:Consulta)
@@ -117,13 +105,12 @@ RETURN m.Nome AS NomeMedico,
        COUNT(co) AS TotalConsultasNoMes
 ORDER BY NomeMedico, AnoDaConsulta DESC, MesDaConsulta DESC;
 
-// Consulta 14: Encontrar os Setores com a maior diversidade de Cargos Administrativos.
+// Consulta 13: Encontrar os Setores com a maior diversidade de Cargos Administrativos.
 // Esta consulta utiliza COLLECT e SIZE para contar a quantidade de cargos únicos
-// associados a cada setor, filtrando por aqueles que têm múltiplos cargos distintos.
 MATCH (s:Setor)<-[r:TRABALHA_EM]-(f:Funcionario)
 WHERE r.Cargo IS NOT NULL // Garante que o relacionamento TRABALHA_EM tenha a propriedade Cargo
 WITH s.NomeSet AS NomeDoSetor, COLLECT(DISTINCT r.Cargo) AS CargosUnicosNoSetor
-WHERE SIZE(CargosUnicosNoSetor) > 1 // Filtra para setores com mais de um cargo distinto
+WHERE SIZE(CargosUnicosNoSetor) >= 1 // Filtra para setores com um ou mais de um cargo distinto
 RETURN NomeDoSetor, CargosUnicosNoSetor, SIZE(CargosUnicosNoSetor) AS QuantidadeDeCargosDistintos
 ORDER BY QuantidadeDeCargosDistintos DESC, NomeDoSetor ASC;
 
