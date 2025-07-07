@@ -46,3 +46,6 @@ ON CREATE SET p14.NomePac = 'Nathália Ribeiro', p14.CPF = '456.987.210-34', p14
 
 MERGE (p15:Paciente {CodPac: 15})
 ON CREATE SET p15.NomePac = 'Otávio Souza', p15.CPF = '567.098.321-45', p15.DataNasc = date('1993-07-04'), p15.Endereco = 'Praça das Águas, 1212', p15.Telefone = '(71) 94456-5566';
+
+MERGE (p15:Paciente {CodPac: 16})
+ON CREATE SET p15.NomePac = 'Paulo Souza', p15.CPF = '567.098.321-45', p15.DataNasc = date('1993-07-04'), p15.Endereco = 'Praça das Águas, 1212', p15.Telefone = '(71) 94456-5566';
